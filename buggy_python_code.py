@@ -1,5 +1,6 @@
 import yaml
 import flask
+import urllib3 as urllib
 
 app = flask.Flask(__name__)
 
@@ -12,7 +13,7 @@ def index():
 
 
 CONFIG = {"API_KEY": "771df488714111d39138eb60df756e6b"}
-class Person(object):
+class Person:
     def __init__(self, name):
         self.name = name
 
@@ -23,25 +24,30 @@ def print_nametag(format_string, person):
 
 def fetch_website(urllib_version, url):
     # Import the requested version (2 or 3) of urllib
-    exec(f"import urllib{urllib_version} as urllib", globals())
+    # exec(f"import urllib{urllib_version} as urllib", globals())
     # Fetch and print the requested URL
 
     try:
         http = urllib.PoolManager()
-        r = http.request('GET', url)
+        request = http.request('GET', url)
     except:
         print('Exception')
 
 
 def load_yaml(filename):
     stream = open(filename)
-    deserialized_data = yaml.load(stream, Loader=yaml.Loader) #deserializing data
+    deserialized_data = yaml.safe_load(stream, Loader=yaml.Loader) #deserializing data
     return deserialized_data
+
 
 def authenticate(password):
     # Assert that the password is correct
-    assert password == "Iloveyou", "Invalid password!"
-    print("Successfully authenticated!")
+    assert password == "Iloveyou", 
+    if (password == "Iloveyou"):
+        print("Successfully authenticated!")
+    else:
+        print("Invalid password!")
+
 
 if __name__ == '__main__':
     print("Vulnerabilities:")
